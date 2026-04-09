@@ -100,7 +100,7 @@
             <div class="p-3 border-t border-slate-100">
                 <button class="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-red-500 hover:bg-red-50 transition-custom group">
                     <i class="fas fa-sign-out-alt w-4 text-[10px] group-hover:-translate-x-0.5 transition-transform"></i> 
-                    <span class="font-bold">Déconnexion</span>
+                    <span class="font-bold">Mon Profil</span>
                 </button>
             </div>
         </aside>
@@ -202,17 +202,16 @@
 
             <td class="px-6 py-3 text-right">
                 <div class="flex justify-end items-center space-x-1">
-                    <button type="button" onclick="openModal('modalEditTeacher-{{ $prof->id }}')" 
+                   <a href="#" class="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all">
+                        <i class="fas fa-eye text-[10px]"></i>
+                    </a>
+
+                <button type="button" onclick="openModal('modalEditTeacher-{{ $prof->id }}')" 
                         class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
                         <i class="fas fa-edit text-[10px]"></i>
                     </button>
 
-                    <form action="{{-- route('professeurs.destroy', $prof->id) --}}" method="POST" onsubmit="return confirm('Supprimer ce professeur ?')" class="inline">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
-                            <i class="fas fa-trash text-[10px]"></i>
-                        </button>
-                    </form>
+                  
                 </div>
 
                 <div id="modalEditTeacher-{{ $prof->id }}" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[200] p-4 text-left">

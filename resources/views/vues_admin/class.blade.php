@@ -82,7 +82,7 @@
             <div class="p-3 border-t border-slate-100">
                 <button class="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-red-500 hover:bg-red-50 transition-custom group">
                     <i class="fas fa-sign-out-alt w-4 text-[10px] group-hover:-translate-x-0.5 transition-transform"></i> 
-                    <span class="font-bold">Déconnexion</span>
+                    <span class="font-bold">Mon Profil</span>
                 </button>
             </div>
         </aside>
@@ -172,9 +172,12 @@
                         <i class="fas fa-eye text-[10px]"></i>
                     </a>
                    
-                    <button class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
-                        <i class="fas fa-edit text-[10px]"></i>
-                    </button>
+                    <button 
+    onclick="prepareEdit(this)"
+    data-classe='@json($classe)'
+    class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
+    <i class="fas fa-edit text-[10px]"></i>
+</button>
 
                    
                     <form action="{{ route('classes.destroy', $classe->id) }}" method="POST" class="inline" onsubmit="return confirm('Supprimer cette classe ?')">
@@ -250,22 +253,73 @@
         </div>
     </div>
 
-    <div id="modalEdit" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[100] p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 transform transition-all border-t-4 border-emerald-500">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-black text-slate-800 tracking-tight">Modifier</h3>
-                <button onclick="closeModal('modalEdit')" class="text-slate-400 hover:text-red-500"><i class="fas fa-times text-xs"></i></button>
-            </div>
-            <form class="space-y-3">
-                <input type="text" value="6ème A - Sciences" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none text-[13px]">
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg text-xs transition-all">Mettre à jour</button>
-            </form>
+<div id="modalEdit" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[100] p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 transform transition-all border-t-4 border-blue-600">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-black text-slate-800 tracking-tight">Modifier la Classe</h3>
+            <button onclick="closeModal('modalEdit')" class="text-slate-400 hover:text-red-500"><i class="fas fa-times text-xs"></i></button>
         </div>
+        
+        <form id="formEdit" method="POST" class="space-y-3">
+            @csrf
+            @method('PUT')
+            
+            <div>
+                <label class="block text-slate-500 mb-1 text-[11px] font-bold uppercase">Nom de la Classe</label>
+                <input type="text" name="nom_classe" id="edit_nom" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none text-[13px]">
+            </div>
+
+            <div>
+                <label class="block text-slate-500 mb-1 text-[11px] font-bold uppercase">Niveau Scolaire</label>
+                <select name="niveau" id="edit_niveau" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[13px] outline-none">
+                    <option value="Primaire">Primaire</option>
+                    <option value="Collège">Collège</option>
+                    <option value="Lycée">Lycée</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-slate-500 mb-1 text-[11px] font-bold uppercase">Année</label>
+                    <input type="number" name="annee_scolaire" id="edit_annee" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[13px] outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1 text-[11px] font-bold uppercase">Capacité</label>
+                    <input type="number" name="capacite" id="edit_capacite" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[13px] outline-none">
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg mt-2 text-xs uppercase tracking-widest transition-all">
+                Enregistrer les modifications
+            </button>
+        </form>
     </div>
+</div>
 
     <script>
         function openModal(id) { document.getElementById(id).classList.add('modal-active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('modal-active'); }
+
+
+
+
+        function prepareEdit(button) {
+    
+    const classe = JSON.parse(button.getAttribute('data-classe'));
+    
+    // 2. Cibler le formulaire et mettre à jour l'URL d'action dynamiquement
+    const form = document.getElementById('formEdit');
+    form.action = `/class/${classe.id}`;
+    
+    // 3. Remplir les champs du modal avec les valeurs actuelles
+    document.getElementById('edit_nom').value = classe.nom_classe;
+    document.getElementById('edit_niveau').value = classe.niveau;
+    document.getElementById('edit_annee').value = classe.annee_scolaire;
+    document.getElementById('edit_capacite').value = classe.capacite || '';
+    
+    // 4. Afficher le modal
+    openModal('modalEdit');
+}
     </script>
 </body>
 </html>

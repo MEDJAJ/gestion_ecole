@@ -74,114 +74,131 @@
             <div class="p-3 border-t border-slate-100">
                 <button class="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-red-500 hover:bg-red-50 transition-custom group">
                     <i class="fas fa-sign-out-alt w-4 text-[10px] group-hover:-translate-x-0.5 transition-transform"></i> 
-                    <span class="font-bold text-[12px]">Déconnexion</span>
+                    <span class="font-bold text-[12px]">Mon Profil</span>
                 </button>
             </div>
         </aside>
 
-        <main class="flex-1 p-5 lg:p-6 overflow-y-auto">
-            <div class="max-w-5xl mx-auto">
-                
-                <div class="bg-white rounded-[1.5rem] p-5 shadow-sm border border-slate-200 mb-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div>
-                            <h1 class="text-xl font-black text-slate-800 tracking-tight">AFFECTATION DE MASSE</h1>
-                            <p class="text-slate-500 text-[11px] mt-0.5 italic">Déplacez vos élèves vers une nouvelle classe en un clic.</p>
-                        </div>
-                        
-                        <div class="flex items-center gap-3">
-                            <div class="relative min-w-[180px]">
-                                <select class="w-full bg-slate-50 border border-slate-200 py-2 pl-3 pr-8 rounded-xl font-bold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500/10 appearance-none cursor-pointer text-[12px]">
-                                    <option>Choisir Classe Destination</option>
-                                    <option>1ère Année Bac A</option>
-                                    <option>2ème Année Bac B</option>
-                                </select>
-                                <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]"></i>
-                            </div>
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl font-bold text-[12px] shadow-lg shadow-blue-100 transition-all flex items-center space-x-2 active:scale-95">
-                                <i class="fas fa-exchange-alt"></i>
-                                <span>Affecter</span>
-                            </button>
-                        </div>
+       <main class="flex-1 p-5 lg:p-6 overflow-y-auto bg-slate-50">
+    <div class="max-w-5xl mx-auto">
+        
+        <form action="{{ route('affectation.store') }}" method="POST">
+            @csrf
+            <div class="bg-white rounded-[1.5rem] p-5 shadow-sm border border-slate-200 mb-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-xl font-black text-slate-800 tracking-tight uppercase">Affectation de Masse</h1>
+                        <p class="text-slate-500 text-[11px] mt-0.5 italic">Sélectionnez les élèves et choisissez leur classe de destination.</p>
                     </div>
-                </div>
-
-                <div class="bg-white rounded-[1.2rem] border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="px-6 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
-                        <div class="relative w-64">
-                            <input type="text" placeholder="Rechercher un élève..." class="w-full bg-white border border-slate-200 py-1.5 pl-9 pr-4 rounded-lg text-[11px] focus:ring-2 focus:ring-blue-500/10 outline-none">
-                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 text-[10px]"></i>
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="relative min-w-[220px]">
+                            <select name="classe_id" required class="w-full bg-slate-50 border border-slate-200 py-2.5 pl-3 pr-8 rounded-xl font-bold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500/10 appearance-none cursor-pointer text-[12px]">
+                                <option value="">Choisir Classe Destination</option>
+                                @foreach($classes as $classe)
+                                    <option value="{{ $classe->id }}">{{ $classe->nom_classe }} ({{ $classe->niveau }})</option>
+                                @endforeach
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]"></i>
                         </div>
-                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Liste des élèves disponibles</span>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-50/50">
-                                <tr class="text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">
-                                    <th class="px-6 py-3 w-10">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer">
-                                    </th>
-                                    <th class="px-3 py-3">Nom de l'élève</th>
-                                    <th class="px-6 py-3 text-center">Classe Actuelle</th>
-                                    <th class="px-6 py-3 text-center">Sexe</th>
-                                    <th class="px-6 py-3 text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-50">
-                                <tr class="hover:bg-blue-50/20 transition-colors group">
-                                    <td class="px-6 py-2.5">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
-                                    </td>
-                                    <td class="px-3 py-2.5">
-                                        <div class="flex items-center">
-                                            <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-[9px] mr-2.5 border border-slate-200">OM</div>
-                                            <span class="font-bold text-slate-700 text-[12px]">Omar Mouline</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-2.5 text-center">
-                                        <span class="text-[9px] font-bold text-orange-500 bg-orange-50 px-2 py-0.5 rounded-md italic border border-orange-100">Non-assigné</span>
-                                    </td>
-                                    <td class="px-6 py-2.5 text-center text-[11px] text-slate-500">Masculin</td>
-                                    <td class="px-6 py-2.5 text-right">
-                                        <button class="text-blue-500 opacity-0 group-hover:opacity-100 font-bold text-[10px] transition-opacity uppercase tracking-tighter hover:underline">Voir dossier</button>
-                                    </td>
-                                </tr>
-
-                                <tr class="hover:bg-blue-50/20 transition-colors group">
-                                    <td class="px-6 py-2.5">
-                                        <input type="checkbox" class="w-3.5 h-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
-                                    </td>
-                                    <td class="px-3 py-2.5">
-                                        <div class="flex items-center">
-                                            <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-[9px] mr-2.5 border border-slate-200">LB</div>
-                                            <span class="font-bold text-slate-700 text-[12px]">Layla Bennani</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-2.5 text-center">
-                                        <span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">6ème Année C</span>
-                                    </td>
-                                    <td class="px-6 py-2.5 text-center text-[11px] text-slate-500">Féminin</td>
-                                    <td class="px-6 py-2.5 text-right">
-                                        <button class="text-blue-500 opacity-0 group-hover:opacity-100 font-bold text-[10px] transition-opacity uppercase tracking-tighter hover:underline">Voir dossier</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="px-6 py-3 bg-slate-50/50 border-t border-slate-100 flex justify-between items-center">
-                        <p class="text-[10px] text-slate-400 font-medium italic italic">Sélectionnez plusieurs élèves pour une action groupée.</p>
-                        <div class="flex space-x-1">
-                            <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-400 hover:text-blue-600 transition-all shadow-sm"><i class="fas fa-chevron-left text-[8px]"></i></button>
-                            <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-[10px] shadow-md shadow-blue-200">1</button>
-                            <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-400 hover:text-blue-600 transition-all shadow-sm"><i class="fas fa-chevron-right text-[8px]"></i></button>
-                        </div>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-[12px] shadow-lg shadow-blue-100 transition-all flex items-center space-x-2 active:scale-95">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Affecter la sélection</span>
+                        </button>
                     </div>
                 </div>
             </div>
-        </main>
+
+            <div class="bg-white rounded-[1.2rem] border border-slate-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-blue-100 text-blue-600 p-2 rounded-lg text-[10px]">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest">Élèves en attente d'affectation</span>
+                    </div>
+                    <span class="bg-orange-100 text-orange-600 text-[9px] font-black px-2 py-1 rounded-md">
+                        {{ $elevesSansClasse->count() }} DISPONIBLES
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50/50">
+                            <tr class="text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">
+                                <th class="px-6 py-4 w-10">
+                                    <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer">
+                                </th>
+                                <th class="px-3 py-4">Nom Complet</th>
+                                <th class="px-6 py-4 text-center">Identifiant</th>
+                                <th class="px-6 py-4 text-center">Rôle</th>
+                                <th class="px-6 py-4 text-right">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            @forelse($elevesSansClasse as $eleve)
+                            <tr class="hover:bg-blue-50/30 transition-all group">
+                                <td class="px-6 py-3.5">
+                                    <input type="checkbox" name="user_ids[]" value="{{ $eleve->id }}" class="eleve-checkbox w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                                </td>
+                                <td class="px-3 py-3.5">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-600 font-black text-[10px] mr-3 border border-white shadow-sm">
+                                            {{ strtoupper(substr($eleve->nom, 0, 1)) }}{{ strtoupper(substr($eleve->prenom, 0, 1)) }}
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="font-bold text-slate-700 text-[13px] tracking-tight">{{ $eleve->nom }} {{ $eleve->prenom }}</span>
+                                            <span class="text-[9px] text-slate-400 font-medium">{{ $eleve->email }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-3.5 text-center">
+                                    <span class="text-[10px] font-mono text-slate-400">#USR-{{ $eleve->id }}</span>
+                                </td>
+                                <td class="px-6 py-3.5 text-center">
+                                    <span class="text-[9px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 uppercase">{{ $eleve->role }}</span>
+                                </td>
+                                <td class="px-6 py-3.5 text-right">
+                                    <span class="inline-flex items-center text-[9px] font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded-lg border border-orange-100 italic">
+                                        <span class="w-1 h-1 rounded-full bg-orange-400 mr-1.5 animate-pulse"></span>
+                                        Non-assigné
+                                    </span>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="py-20 text-center">
+                                    <div class="flex flex-col items-center">
+                                        <i class="fas fa-check-circle text-emerald-200 text-4xl mb-4"></i>
+                                        <p class="text-slate-400 font-bold text-[11px] uppercase tracking-[0.2em]">Tous les élèves sont assignés !</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="px-6 py-4 bg-slate-50/50 border-t border-slate-100 flex justify-between items-center">
+                    <p class="text-[10px] text-slate-400 font-medium italic">Astuce : Utilisez la case en haut pour tout sélectionner.</p>
+                </div>
+            </div>
+        </form>
     </div>
+</main>
+
+
+    </div>
+
+    <script>
+    
+    document.getElementById('selectAll').onclick = function() {
+        let checkboxes = document.querySelectorAll('.eleve-checkbox');
+        for (let checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    }
+</script>
 
 </body>
 </html>

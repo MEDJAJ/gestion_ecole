@@ -76,7 +76,7 @@
             <div class="p-3 border-t border-slate-100">
                 <button class="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-red-500 hover:bg-red-50 transition-custom group">
                     <i class="fas fa-sign-out-alt w-4 text-[10px] group-hover:-translate-x-0.5 transition-transform"></i> 
-                    <span class="font-bold text-[12px]">Déconnexion</span>
+                    <span class="font-bold text-[12px]">Mon Profil</span>
                 </button>
             </div>
         </aside>

@@ -79,7 +79,7 @@
             <div class="p-3 border-t border-slate-100">
                 <button class="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-red-500 hover:bg-red-50 transition-custom group">
                     <i class="fas fa-sign-out-alt w-4 text-[10px] group-hover:-translate-x-0.5 transition-transform"></i> 
-                    <span class="font-bold">Déconnexion</span>
+                    <span class="font-bold">Mon Profil</span>
                 </button>
             </div>
         </aside>
@@ -160,9 +160,12 @@
                     </a>
 
                
-                    <button class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
-                        <i class="fas fa-edit text-[10px]"></i>
-                    </button>
+                  <button 
+    onclick="prepareEditSubject(this)"
+    data-subject='@json($matiere)'
+    class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
+    <i class="fas fa-edit text-[10px]"></i>
+</button>
             
                     <form action="{{ route('matieres.destroy', $matiere->id) }}" method="POST" class="inline" onsubmit="return confirm('Supprimer cette matière ?')">
                         @csrf
@@ -244,9 +247,75 @@
         </div>
     </div>
 
+
+
+    <div id="modalEditSubject" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[100] p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 transform transition-all border-t-4 border-blue-600">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-black text-slate-800 tracking-tight">Modifier la Matière</h3>
+            <button onclick="closeModal('modalEditSubject')" class="text-slate-400 hover:text-red-500"><i class="fas fa-times text-xs"></i></button>
+        </div>
+        
+        <form id="formEditSubject" method="POST" class="space-y-3">
+            @csrf
+            @method('PUT')
+            
+            <div>
+                <label class="block text-slate-500 mb-1 text-[10px] font-bold uppercase tracking-widest">Nom de la Matière</label>
+                <input type="text" name="nom_matiere" id="edit_nom" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none text-[13px]">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-slate-500 mb-1 text-[10px] font-bold uppercase tracking-widest">Code</label>
+                    <input type="text" name="code_matiere" id="edit_code" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none text-[13px]">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1 text-[10px] font-bold uppercase tracking-widest">Niveau</label>
+                    <input type="text" name="niveau" id="edit_niveau" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none text-[13px]">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-slate-500 mb-1 text-[10px] font-bold uppercase tracking-widest">Coefficient</label>
+                    <input type="number" name="coefficient" id="edit_coeff" step="0.5" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none text-[13px]">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1 text-[10px] font-bold uppercase tracking-widest">Description</label>
+                    <input type="text" name="description" id="edit_desc" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none text-[13px]">
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg mt-2 text-xs uppercase tracking-widest transition-all">
+                Mettre à jour la matière
+            </button>
+        </form>
+    </div>
+</div>
     <script>
         function openModal(id) { document.getElementById(id).classList.add('modal-active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('modal-active'); }
+
+
+        function prepareEditSubject(button) {
+    const subject = JSON.parse(button.getAttribute('data-subject'));
+    const form = document.getElementById('formEditSubject');
+    
+    
+    form.action = `/matiére/${subject.id}`; 
+    
+ 
+    document.getElementById('edit_nom').value = subject.nom_matiere;
+    document.getElementById('edit_code').value = subject.code_matiere;
+    document.getElementById('edit_niveau').value = subject.niveau || '';
+    document.getElementById('edit_coeff').value = subject.coefficient;
+    document.getElementById('edit_desc').value = subject.description || '';
+    
+    openModal('modalEditSubject');
+}
+
+
     </script>
 </body>
 </html>

@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AffectationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\EleveController;
+use App\Http\Controllers\MatiereClass;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfController;
 
@@ -56,17 +58,17 @@ Route::post('/classes/store', [ClasseController::class, 'store'])->name('classes
 Route::get('/class', [ClasseController::class, 'index'])->name('classes.index');
 Route::delete('/classes/{id}', [ClasseController::class, 'destroy'])->name('classes.destroy');
 
-Route::get('/associer_matiére',function(){
- return view('vues_admin.associer_matiére');
-});
+Route::get('/associer_matiére', [MatiereClass::class, 'createAssociation'])->name('association.create');
+Route::post('/associer_matiére', [MatiereClass::class, 'storeAssociation'])->name('association.store');
+Route::get('/associer_matiére_liste', [MatiereClass::class, 'indexAssociation'])->name('association.index');
 
 Route::get('/affecter_prof_class',function(){
  return view('vues_admin.affecter_prof_class');
 });
 
-Route::get('/affecter_éleve_class',function(){
- return view('vues_admin.affecter_éleve_class');
-});
+Route::get('/affecter_éleve_class',[AffectationController::class, 'index']);
+
+Route::post('/affectation-eleves/store', [AffectationController::class, 'storeAffectation'])->name('affectation.store');
 
 Route::get('/note_classement',function(){
  return view('vues_admin.note_classement');
@@ -105,3 +107,10 @@ Route::get('/emploi',function(){
 Route::get('/dashbord_prof',function(){
     return view('vues_prof.home');
 })->name('prof.dashboard');
+
+
+Route::put('/class/{classe}', [ClasseController::class, 'update'])->name('classes.update');
+Route::delete('/class/{id}', [ClasseController::class, 'destroy'])->name('classes.destroy');
+
+Route::put('/matiére/{id}', [MatiereController::class, 'update'])->name('matieres.update');
+Route::delete('/matiére/{id}', [MatiereController::class, 'destroy'])->name('matieres.destroy');
