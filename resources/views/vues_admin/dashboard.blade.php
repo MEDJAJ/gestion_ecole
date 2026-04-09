@@ -84,16 +84,29 @@
             <div class="p-3 border-t border-slate-100">
            <div class="p-3 border-t border-slate-100 relative">
     <div id="profileMenu" class="hidden absolute bottom-full left-3 right-3 mb-2 bg-white rounded-2xl border border-slate-100 shadow-xl z-50 overflow-hidden animate-fade-in-up">
-        <div class="p-2 space-y-1">
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-blue-50 text-slate-700 transition-colors group">
-                <i class="fas fa-user-edit text-[10px] text-blue-500"></i>
-                <span class="text-[12px] font-bold">Modifier profil</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-blue-50 text-slate-700 transition-colors group">
-                <i class="fas fa-language text-[10px] text-indigo-500"></i>
-                <span class="text-[12px] font-bold">Changer langue</span>
-            </a>
-        </div>
+       <div class="p-2 space-y-1">
+    <a href="{{ route('profile.edit') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-blue-50 text-slate-700 transition-colors group">
+        <i class="fas fa-user-edit text-[10px] text-blue-500 group-hover:scale-110 transition-transform"></i>
+        <span class="text-[12px] font-bold">Modifier profil</span>
+    </a>
+
+    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-blue-50 text-slate-700 transition-colors group">
+        <i class="fas fa-language text-[10px] text-indigo-500"></i>
+        <span class="text-[12px] font-bold">Changer langue</span>
+    </a>
+
+    <div class="my-1 border-t border-slate-100"></div>
+
+    <form method="POST" action="{{ route('logout') }}" id="logout-form">
+        @csrf
+        <a href="{{ route('logout') }}" 
+           onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+           class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 transition-colors group">
+            <i class="fas fa-sign-out-alt text-[10px] group-hover:-translate-x-1 transition-transform"></i>
+            <span class="text-[12px] font-bold">Déconnexion</span>
+        </a>
+    </form>
+</div>
     </div>
 
     <button id="profileBtn" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-100 hover:bg-blue-50/40 transition-all duration-300 group active:scale-[0.98]">

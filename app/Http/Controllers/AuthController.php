@@ -95,4 +95,43 @@ public function login(Request $request)
         default => redirect('/'),
     };
 }
+
+
+public function edit()
+{
+ 
+    $user = auth()->user();
+    return view('profile.edit', compact('user'));
+}
+
+public function update(Request $request)
+{
+    $user = auth()->user();
+    
+    $request->validate([
+        'nom' => 'required|string|max:255',
+        'prenom' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'telephone' => 'nullable|string|max:20',
+    ]);
+
+    $user->update($request->all());
+
+    return redirect()->back()->with('success', 'Profil mis à jour !');
+}
+
+public function logout(Request $request)
+{
+    
+    Auth::logout();
+
+   
+    $request->session()->invalidate();
+
+   
+    $request->session()->regenerateToken();
+
+  
+    return redirect()->route('login')->with('success', 'Vous avez été déconnecté.');
+}
 }

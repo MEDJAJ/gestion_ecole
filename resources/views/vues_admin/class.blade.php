@@ -78,12 +78,44 @@
                     <i class="fas fa-calendar-alt w-4 text-[10px]"></i> <span class="font-medium">Emploi du temps</span>
                 </a>
             </nav>
+   <div class="p-3 border-t border-slate-100">
+           <div class="p-3 border-t border-slate-100 relative">
+    <div id="profileMenu" class="hidden absolute bottom-full left-3 right-3 mb-2 bg-white rounded-2xl border border-slate-100 shadow-xl z-50 overflow-hidden animate-fade-in-up">
+       <div class="p-2 space-y-1">
+    <a href="{{ route('profile.edit') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-blue-50 text-slate-700 transition-colors group">
+        <i class="fas fa-user-edit text-[10px] text-blue-500 group-hover:scale-110 transition-transform"></i>
+        <span class="text-[12px] font-bold">Modifier profil</span>
+    </a>
 
-            <div class="p-3 border-t border-slate-100">
-                <button class="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-red-500 hover:bg-red-50 transition-custom group">
-                    <i class="fas fa-sign-out-alt w-4 text-[10px] group-hover:-translate-x-0.5 transition-transform"></i> 
-                    <span class="font-bold">Mon Profil</span>
-                </button>
+    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-blue-50 text-slate-700 transition-colors group">
+        <i class="fas fa-language text-[10px] text-indigo-500"></i>
+        <span class="text-[12px] font-bold">Changer langue</span>
+    </a>
+
+    <div class="my-1 border-t border-slate-100"></div>
+
+    <form method="POST" action="{{ route('logout') }}" id="logout-form">
+        @csrf
+        <a href="{{ route('logout') }}" 
+           onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+           class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 transition-colors group">
+            <i class="fas fa-sign-out-alt text-[10px] group-hover:-translate-x-1 transition-transform"></i>
+            <span class="text-[12px] font-bold">Déconnexion</span>
+        </a>
+    </form>
+</div>
+    </div>
+
+    <button id="profileBtn" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-100 hover:bg-blue-50/40 transition-all duration-300 group active:scale-[0.98]">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                <i class="fas fa-user text-[11px]"></i>
+            </div>
+            <span class="font-bold text-slate-700 group-hover:text-blue-700 transition-colors text-[12px]">Mon Profil</span>
+        </div>
+        <i id="profileArrow" class="fas fa-chevron-up text-[8px] text-slate-300 transition-transform duration-300"></i>
+    </button>
+</div>
             </div>
         </aside>
 
@@ -320,6 +352,33 @@
     // 4. Afficher le modal
     openModal('modalEdit');
 }
+
+
+ const profileBtn = document.getElementById('profileBtn');
+    const profileMenu = document.getElementById('profileMenu');
+    const profileArrow = document.getElementById('profileArrow');
+
+   
+    profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        const isHidden = profileMenu.classList.contains('hidden');
+        
+        if (isHidden) {
+            profileMenu.classList.remove('hidden');
+            profileArrow.style.transform = 'rotate(180deg)';
+        } else {
+            profileMenu.classList.add('hidden');
+            profileArrow.style.transform = 'rotate(0deg)';
+        }
+    });
+
+    
+    document.addEventListener('click', (e) => {
+        if (!profileMenu.contains(e.target) && !profileBtn.contains(e.target)) {
+            profileMenu.classList.add('hidden');
+            profileArrow.style.transform = 'rotate(0deg)';
+        }
+    });
     </script>
 </body>
 </html>

@@ -13,10 +13,13 @@ Route::get('/', function () {
     return view('home');
 });
 
+Route::get('/profile/edit', [AuthController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [AuthController::class, 'update'])->name('profile.update');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('loginn');
 Route::get('/login',[AuthController::class, 'showLogin'])->name('login');
 Route::get('/register',[AuthController::class, 'showRegister']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/forget',function(){
  return view('forget');
